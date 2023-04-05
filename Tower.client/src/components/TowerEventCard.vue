@@ -3,7 +3,7 @@
         <div class="elevation-3 rounded">
             <img class="img-fluid" :src="towerEvent.coverImg" :alt="towerEvent.name">
             <div class="p-2">
-                <h5>{{ towerEvent.name }}</h5>
+                <h5 class="text-warning">{{ towerEvent.name }}</h5>
             </div>
         </div>
     </router-link>
