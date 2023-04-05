@@ -1,3 +1,4 @@
+import { commentsService } from "../services/CommentsService.js";
 import { towerEventsService } from "../services/TowerEventsService.js";
 import BaseController from "../utils/BaseController.js"
 import { Auth0Provider } from "@bcwdev/auth0provider";
@@ -10,6 +11,7 @@ export class TowerEventsController extends BaseController{
         this.router
         .get('', this.getAllTowerEvents)
         .get('/:id', this.getTowerEventById)
+        .get('/:id/comments', this.getComments)
         .use(Auth0Provider.getAuthorizedUserInfo)
         .post('', this.createTowerEvent)
         .put('/:id', this.editTowerEvent)
@@ -30,6 +32,16 @@ export class TowerEventsController extends BaseController{
             let towerEventId = req.params.id
             let towerEvent = await towerEventsService.getTowerEventById(towerEventId)
             return res.send(towerEvent)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async getComments(req, res, next) {
+        try {
+            let eventId = req.params.id
+            let comments = await commentsService.getComments(eventId)
+            return res.send(comments)
         } catch (error) {
             next(error)
         }
