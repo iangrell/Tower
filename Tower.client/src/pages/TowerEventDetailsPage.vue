@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-        <!-- SECTION EVENT DETAILS add -->
+        <!-- SECTION EVENT DETAILS-->
         <section class="row text-light">
             <div class="col-12 justify-content-end">
                 <button class="btn btn-outline-light">Edit Event</button>
