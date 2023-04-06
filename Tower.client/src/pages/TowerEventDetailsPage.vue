@@ -5,8 +5,7 @@
             <div class="col-12 justify-content-end">
                 <button v-if="activeTowerEvent.creatorId == account.id && activeTowerEvent.isCanceled == false" class="btn btn-outline-danger m-1" @click="cancelTowerEvent()">Cancel Event</button>
 
-                <!-- NOTE Edit button not required, I think, I hope -->
-                <!-- <button v-if="activeTowerEvent.creatorId == account.id && activeTowerEvent.isCanceled == false" class="btn btn-outline-light m-1">Edit Event</button> -->
+                
 
             </div>
             <div class="col-md-4 p-3">
@@ -42,9 +41,43 @@
         <section class="row"></section>
 
         <!-- SECTION COMMENTS -->
-        <section class="row"></section>
+        <section class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-6 text-light">
+                        <p>What are people saying</p>
+                    </div>
+                    <div class="col-6 text-end text-success">
+                        <p>Join the conversation</p>
+                    </div>
+                    <div class="col-12 text-center">
+                        <!-- <textarea name="createComment" id="createComment" cols="145" rows="4"></textarea>
+                        <button class="btn btn-outline-success">post comment</button> -->
+                        <button v-if="account.id" type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#commentModal">Create Comment</button>
+                    </div>
+                    <!-- SECTION COMMENT CARD -->
+                    <div class="col-12 my-3" v-for="c in comments" :key="c.id">
+                        <CommentCard :comment="c"/>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
+
+    <Modal id="commentModal">
+    <template #header>
+      <div>Create Comment</div>
+    </template>
+
+    <template #modalGuts>
+      <CommentForm />
+    </template>
+
+  </Modal>
 </template>
+
+<!-- NOTE Edit button not required, I think, I hope , LINE-8 -->
+                <!-- <button v-if="activeTowerEvent.creatorId == account.id && activeTowerEvent.isCanceled == false" class="btn btn-outline-light m-1">Edit Event</button> -->
 
 
 <script>
@@ -73,6 +106,7 @@ export default {
         async function getComments() {
             try {
                 const towerEventId = route.params.towerEventId
+                logger.log('TOWER EVENT ID!!!',towerEventId)
                 await commentsService.getComments(towerEventId)
             } catch (error) {
                 logger.error(error.message)
@@ -102,8 +136,9 @@ export default {
                 Pop.error(error.message)
             }
         }
-     }
     }
+    },
+    // components: { Modal },
 };
 </script>
 
