@@ -47,6 +47,7 @@ import { useRoute } from 'vue-router';
 import { logger } from '../utils/Logger.js';
 import Pop from '../utils/Pop.js';
 import { towerEventsService } from '../services/TowerEventsService.js';
+import { commentsService } from '../services/CommentsService.js'
 
 export default {
     setup(){
@@ -62,12 +63,24 @@ export default {
             }
         }
 
+        async function getComments() {
+            try {
+                const towerEventId = route.params.towerEventId
+                await commentsService.getComments(towerEventId)
+            } catch (error) {
+                logger.error(error.message)
+                Pop.error(error,message)
+            }
+        }
+
         onMounted(() => {
             getTowerEventById()
+            getComments()
         })
 
     return { 
-        activeTowerEvent: computed(() => AppState.activeTowerEvent)
+        activeTowerEvent: computed(() => AppState.activeTowerEvent),
+        comments: computed (() => AppState.comments)
      }
     }
 };
