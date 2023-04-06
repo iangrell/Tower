@@ -22,6 +22,7 @@
           <!-- <router-link :to="{ name: 'About' }" class="btn text-success lighten-30 selectable text-uppercase">
             About
           </router-link> -->
+          <button v-if="account.id" type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#towerEventModal">Create Event</button>
         </li>
       </ul>
       <!-- LOGIN COMPONENT HERE -->
@@ -31,10 +32,21 @@
 </template>
 
 <script>
+import { useRoute } from 'vue-router';
 import Login from './Login.vue'
+import { computed } from '@vue/reactivity';
+import { AppState } from '../AppState.js';
+
 export default {
   setup() {
-    return {}
+    const route = useRoute()
+
+    return {
+      route,
+
+      towerEvent: computed(() => AppState.activeTowerEvent),
+      account: computed(() => AppState.account),
+    }
   },
   components: { Login }
 }

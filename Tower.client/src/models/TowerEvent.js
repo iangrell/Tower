@@ -12,8 +12,8 @@ export class TowerEvent{
         this.coverImg = data.coverImg
         this.location = data.location
         this.capacity = data.capacity
-        this.startDate = data.startDate
-        this.canceled = data.isCanceled
+        this.startDate = new Date(data.startDate).toLocaleString()
+        this.isCanceled = data.isCanceled
         this.type = data.type
         this.ticketCount = data.ticketCount || 0
     }

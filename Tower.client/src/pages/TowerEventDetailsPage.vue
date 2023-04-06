@@ -3,7 +3,11 @@
         <!-- SECTION EVENT DETAILS-->
         <section class="row text-light">
             <div class="col-12 justify-content-end">
-                <button class="btn btn-outline-light">Edit Event</button>
+                <button v-if="activeTowerEvent.creatorId == account.id && activeTowerEvent.isCanceled == false" class="btn btn-outline-danger m-1" @click="cancelTowerEvent()">Cancel Event</button>
+
+                <!-- NOTE Edit button not required, I think, I hope -->
+                <!-- <button v-if="activeTowerEvent.creatorId == account.id && activeTowerEvent.isCanceled == false" class="btn btn-outline-light m-1">Edit Event</button> -->
+
             </div>
             <div class="col-md-4 p-3">
                 <img class="img-fluid" :src="activeTowerEvent.coverImg" :alt="activeTowerEvent.name">
@@ -24,7 +28,10 @@
                         <h6>{{ activeTowerEvent.capacity }} available tickets</h6>
                     </div>
                     <div class="col-md-6">
-                        <button class="btn btn-outline-light">Get Ticket</button>
+                        <button v-if="activeTowerEvent.isCanceled == false" class="btn btn-outline-light">Get Ticket</button>
+                    </div>
+                    <div v-if="activeTowerEvent.isCanceled == true" class="col-md-12 text-center bg-danger">
+                        <h3>Tower Event Canceled</h3>
                     </div>
 
                 </div>
@@ -79,8 +86,22 @@ export default {
         })
 
     return { 
+        route,
+
         activeTowerEvent: computed(() => AppState.activeTowerEvent),
-        comments: computed (() => AppState.comments)
+        comments: computed (() => AppState.comments),
+        account: computed(() => AppState.account),
+
+        async cancelTowerEvent() {
+            try {
+                if (await Pop.confirm('Do you want to cancel this Tower Event?')) {
+                    await towerEventsService.cancelTowerEvent()
+                }
+            } catch (error) {
+                logger.error(error.message)
+                Pop.error(error.message)
+            }
+        }
      }
     }
 };
