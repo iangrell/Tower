@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <!-- SECTION EVENT DETAILS-->
-        <section class="row text-light">
+        <section class="row m-2 text-light">
             <div class="col-12 justify-content-end">
                 <button v-if="activeTowerEvent.creatorId == account.id && activeTowerEvent.isCanceled == false" class="btn btn-outline-danger m-1" @click="cancelTowerEvent()">Cancel Event</button>
 
@@ -38,10 +38,18 @@
         </section>
 
         <!-- SECTION TICKET HOLDERS -->
-        <section class="row"></section>
+        <section class="row m-2">
+            <div>
+                <h4 class="text-light">Attending:</h4>
+            </div>
+                <div class="col-md-2 bg-dark rounded p-1 text-center" v-for="t in tickets" :key="t.id">
+                    <img class="img-fluid rounded-circle" :src="t.picture" :alt="t.name">
+                    <p class="text-center text-light">{{ t.name }}</p>
+                </div>
+            </section>
 
         <!-- SECTION COMMENTS -->
-        <section class="row justify-content-center">
+        <section class="row m-2 justify-content-center">
             <div class="col-md-8">
                 <div class="row">
                     <div class="col-6 text-light">
@@ -88,6 +96,7 @@ import { logger } from '../utils/Logger.js';
 import Pop from '../utils/Pop.js';
 import { towerEventsService } from '../services/TowerEventsService.js';
 import { commentsService } from '../services/CommentsService.js'
+import { ticketsService } from '../services/TicketsService.js'
 
 export default {
     setup(){
@@ -97,6 +106,16 @@ export default {
             try {
                 const towerEventId = route.params.towerEventId
                 await towerEventsService.getTowerEventById(towerEventId)
+            } catch (error) {
+                logger.error(error.message)
+                Pop.error(error.message)
+            }
+        }
+
+        async function getTicketsToEvent() {
+            try {
+                const towerEventId = route.params.towerEventId
+                await ticketsService.getTicketsToEvent(towerEventId)
             } catch (error) {
                 logger.error(error.message)
                 Pop.error(error.message)
@@ -117,6 +136,7 @@ export default {
         onMounted(() => {
             getTowerEventById()
             getComments()
+            getTicketsToEvent()
         })
 
     return { 
@@ -125,6 +145,7 @@ export default {
         activeTowerEvent: computed(() => AppState.activeTowerEvent),
         comments: computed (() => AppState.comments),
         account: computed(() => AppState.account),
+        tickets: computed(() => AppState.tickets),
 
         async cancelTowerEvent() {
             try {

@@ -8,6 +8,7 @@ class TowerEventsService{
     
     
     
+    
     async getAllTowerEvents() {
         const towerEvents = await dbContext.TowerEvents.find()
         .populate("creator", 'picture name')
@@ -61,6 +62,17 @@ class TowerEventsService{
         towerEvent.isCanceled = true
         await towerEvent.save()
         return `Tower Event: ${towerEvent.name} has been successfully canceled.`
+    }
+
+    async getMyTickets(accountId) {
+        let towerEvents = await dbContext.Tickets.find({ accountId })
+            .populate({
+                path: "towerEvent",
+                populate: {
+                    path: "creator ticketCount"
+                }
+            })
+        return towerEvents
     }
 
 }
