@@ -9,7 +9,7 @@
 
         <!-- SECTION TowerEvents filter bar -->
         <section class="row justify-content-center p-3">
-          <div class="col-12 bg-danger p-2 rounded">
+          <div class="col-12 bg-black p-2 rounded">
             <div class="d-flex justify-content-evenly">
               <button class="btn btn-outline-light" @click="changeFilterType('')">All</button>
               <button class="btn btn-outline-light" @click="changeFilterType(t)" v-for="t in types">{{ t.toUpperCase() }}</button>

@@ -8,7 +8,7 @@
             <p>{{ comment?.body }}</p>
         </div>
         <div class="col-2">
-            <button v-if="comment.creatorId == account.id" class="btn btn-outline-danger" @click="deleteComment()">delete comment</button>
+            <button v-if="comment.creatorId == account.id" class="btn btn-danger" @click="deleteComment(comment.id)">delete comment</button>
         </div>
 
     </div>
@@ -35,11 +35,11 @@ export default {
         comments: computed(() => AppState.comments),
         account: computed(() => AppState.account),
 
-        async deleteComment() {
+        async deleteComment(commentId) {
             try {
                 if (await Pop.confirm('Do you want to delete this comment?')) {
                     // TODO not sure how to grab this comment
-                    const commentId = route.params.commentId
+                    // const commentId = route.params.commentId
                     await commentsService.deleteComment(commentId)
                 }
             } catch (error) {

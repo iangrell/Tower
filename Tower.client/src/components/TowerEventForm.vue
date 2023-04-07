@@ -48,18 +48,23 @@ import { computed, reactive, onMounted, ref } from 'vue';
 import { logger } from '../utils/Logger.js';
 import Pop from '../utils/Pop.js';
 import { towerEventsService } from '../services/TowerEventsService.js';
+import { useRouter } from 'vue-router';
 
 export default {
     setup(){
         const editable = ref({})
+        const router = useRouter()
 
         return { 
             editable,
+            router,
 
             async createTowerEvent() {
                 try {
                     const towerEventData = editable.value
-                    await towerEventsService.createTowerEvent(towerEventData)
+                    const towerEvent = await towerEventsService.createTowerEvent(towerEventData)
+                    router.push({name: 'TowerEventDetails', params: {towerEventId: towerEvent.id}})
+                    editable.value = {}
                 } catch (error) {
                     logger.error(error.message)
                     Pop.error(error.message)

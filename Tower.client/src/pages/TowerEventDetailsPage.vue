@@ -3,7 +3,7 @@
         <!-- SECTION EVENT DETAILS-->
         <section class="row m-2 text-light">
             <div class="col-12 justify-content-end">
-                <button v-if="activeTowerEvent.creatorId == account.id && activeTowerEvent.isCanceled == false" class="btn btn-outline-danger m-1" @click="cancelTowerEvent()">Cancel Event</button>
+                <button v-if="activeTowerEvent.creatorId == account.id && activeTowerEvent.isCanceled == false" class="btn btn-danger m-1" @click="cancelTowerEvent()">Cancel Event</button>
 
                 
 
@@ -27,10 +27,13 @@
                         <h6>{{ activeTowerEvent.capacity }} available tickets</h6>
                     </div>
                     <div class="col-md-6">
-                        <button v-if="activeTowerEvent.isCanceled == false" class="btn btn-outline-light">Get Ticket</button>
+                        <button v-if="activeTowerEvent.isCanceled == false && activeTowerEvent.capacity > 0 && !ticketHolder" class="btn btn-outline-light" @click="createTicket()">Get Ticket</button>
                     </div>
                     <div v-if="activeTowerEvent.isCanceled == true" class="col-md-12 text-center bg-danger">
                         <h3>Tower Event Canceled</h3>
+                    </div>
+                    <div v-if="activeTowerEvent.capacity <= 0" class="col-md-12 text-center bg-warning">
+                        <h3>Tower Event Sold Out</h3>
                     </div>
 
                 </div>
@@ -61,7 +64,7 @@
                     <div class="col-12 text-center">
                         <!-- <textarea name="createComment" id="createComment" cols="145" rows="4"></textarea>
                         <button class="btn btn-outline-success">post comment</button> -->
-                        <button v-if="account.id" type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#commentModal">Create Comment</button>
+                        <button v-if="account.id" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#commentModal">Create Comment</button>
                     </div>
                     <!-- SECTION COMMENT CARD -->
                     <div class="col-12 my-3" v-for="c in comments" :key="c.id">
@@ -147,11 +150,22 @@ export default {
         account: computed(() => AppState.account),
         tickets: computed(() => AppState.tickets),
 
+        ticketHolder: computed(() => AppState.tickets.find(t => t.id == AppState.account.id)),
+
         async cancelTowerEvent() {
             try {
                 if (await Pop.confirm('Do you want to cancel this Tower Event?')) {
                     await towerEventsService.cancelTowerEvent()
                 }
+            } catch (error) {
+                logger.error(error.message)
+                Pop.error(error.message)
+            }
+        },
+
+        async createTicket() {
+            try {
+                await ticketsService.createTicket({eventId: route.params.towerEventId})
             } catch (error) {
                 logger.error(error.message)
                 Pop.error(error.message)

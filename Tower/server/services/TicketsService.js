@@ -5,7 +5,7 @@ import { towerEventsService } from "./TowerEventsService.js"
 
 
 class TicketsService {
-    
+
     async deleteTicket(ticketId, userId) {
         let ticket = await dbContext.Tickets.findById(ticketId)
 
@@ -16,14 +16,19 @@ class TicketsService {
         if (userId != ticket.accountId) {
             throw new Forbidden('You can not delete this ticket.')
         }
+        let towerEvent = await towerEventsService.getTowerEventById(ticket.eventId)
+        towerEvent.capacity ++
+        await towerEvent.save()
 
         await ticket.remove()
         return 'Your ticket has been deleted.'
     }
 
+    
+
     async getTicketsToEvent(eventId) {
-        let tickets = await dbContext.Tickets.find({eventId})
-        .populate("profile", 'name picture')
+        let tickets = await dbContext.Tickets.find({ eventId })
+            .populate("profile", 'name picture')
         return tickets
     }
 
@@ -36,13 +41,26 @@ class TicketsService {
 
         let ticket = await dbContext.Tickets.create(ticketData)
         await ticket.populate({
-            path: "towerEvent",
+            path: "event",
             populate: {
                 path: "creator ticketCount"
             }
         })
+        towerEvent.capacity--
+        await towerEvent.save()
         await ticket.populate("profile")
         return ticket
+    }
+
+    async getMyTickets(accountId) {
+        let towerEvents = await dbContext.Tickets.find({ accountId })
+            .populate({
+                path: "event",
+                populate: {
+                    path: "creator ticketCount"
+                }
+            })
+        return towerEvents
     }
 
 }

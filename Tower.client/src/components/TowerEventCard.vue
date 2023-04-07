@@ -3,7 +3,7 @@
         <div class="elevation-3 rounded">
             <img class="img-fluid" :src="towerEvent.coverImg" :alt="towerEvent.name">
             <div class="p-2">
-                <h5 class="text-warning">{{ towerEvent.name }} <b v-if="towerEvent.isCanceled == true" class="bg-danger p-1">CANCELED</b></h5>
+                <h5 class="text-light">{{ towerEvent.name }} <b v-if="towerEvent.isCanceled == true" class="bg-danger p-1">CANCELED</b></h5>
             </div>
         </div>
     </router-link>

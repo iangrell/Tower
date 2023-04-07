@@ -22,7 +22,7 @@
           <!-- <router-link :to="{ name: 'About' }" class="btn text-success lighten-30 selectable text-uppercase">
             About
           </router-link> -->
-          <button v-if="account.id" type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#towerEventModal">Create Event</button>
+          <button v-if="account.id" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#towerEventModal">Create Event</button>
         </li>
       </ul>
       <!-- LOGIN COMPONENT HERE -->

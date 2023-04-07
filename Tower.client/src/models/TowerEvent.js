@@ -18,3 +18,10 @@ export class TowerEvent{
         this.ticketCount = data.ticketCount || 0
     }
 }
+
+export class EventTicket extends TowerEvent {
+    constructor(data) {
+        super(data.event)
+        this.EventTicket = data.id
+    }
+}
