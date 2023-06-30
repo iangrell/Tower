@@ -1,9 +1,10 @@
 <template>
-    <router-link :to="{ name: 'TowerEventDetails', params: { towerEventId: towerEvent.id}}">
+    <router-link :to="{ name: 'TowerEventDetails', params: { towerEventId: towerEvent.id } }">
         <div class="elevation-3 rounded">
             <img class="img-fluid" :src="towerEvent.coverImg" :alt="towerEvent.name">
             <div class="p-2">
-                <h5 class="text-light">{{ towerEvent.name }} <b v-if="towerEvent.isCanceled == true" class="bg-danger p-1">CANCELED</b></h5>
+                <h5 class="text-light">{{ towerEvent.name }} <b v-if="towerEvent.isCanceled == true"
+                        class="bg-danger p-1 rounded">CANCELED</b></h5>
             </div>
         </div>
     </router-link>
@@ -20,13 +21,11 @@ export default {
         towerEvent: { type: TowerEvent, required: true }
     },
 
-    setup(){
-    return {  }
+    setup() {
+        return {}
     }
 };
 </script>
 
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

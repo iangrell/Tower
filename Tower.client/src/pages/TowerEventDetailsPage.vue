@@ -27,7 +27,7 @@
                         <h6>{{ activeTowerEvent.capacity }} available tickets</h6>
                     </div>
                     <div class="col-md-6">
-                        <button v-if="activeTowerEvent.isCanceled == false && activeTowerEvent.capacity > 0 && !ticketHolder" class="btn btn-outline-light" @click="createTicket()">Get Ticket</button>
+                        <button v-if="activeTowerEvent.isCanceled == false && activeTowerEvent.capacity > 0 && !ticketHolder && account.id" class="btn btn-outline-light" @click="createTicket()">Get Ticket</button>
                     </div>
                     <div v-if="activeTowerEvent.isCanceled == true" class="col-md-12 text-center bg-danger">
                         <h3>Tower Event Canceled</h3>
